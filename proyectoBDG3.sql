@@ -621,7 +621,159 @@ CALL sp_eliminar_empleados(987654321);
 
 
 
+/* Procedimientos almacenados para insertar, modificar y eliminar telefonos */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_telefonos
+(
+in	identificacion_usuario_telefono int,
+in	telefono int
+)
+
+BEGIN
+insert into tab_telefonos(identificacion_usuario_telefono, telefono) 					
+			values(identificacion_usuario_telefono, telefono);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_telefonos
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_telefonos WHERE id_telefono=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_telefonos
+(
+in id int, 
+in telefono int
+)
+BEGIN
+UPDATE tab_telefonos SET identificacion_usuario_telefono=identificacion_usuario_telefono, telefono=telefono Where id_telefono=id;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_telefonos(123456787, 87654321);
+CALL sp_insertar_telefonos(123456787, 22304789);
+
+/* Actulizar*/
+CALL sp_actualizar_telefonos(1, 60329874);
+
+/* Eliminar*/
+CALL sp_eliminar_telefonos(1);
 
 
+/* Procedimientos almacenados para insertar, modificar y eliminar correos */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_correos
+(
+in	identificacion_usuario_correo int,
+in	correo varchar(50)
+)
+
+BEGIN
+insert into tab_correos(identificacion_usuario_correo, correo) 					
+			values(identificacion_usuario_correo, correo);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_correos
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_correos WHERE id_correo=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_correos
+(
+in id int, 
+in correo varchar(50)
+)
+BEGIN
+UPDATE tab_correos SET identificacion_usuario_correo=identificacion_usuario_correo, correo=correo Where id_correo=id;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_correos(123456787, "correo@dominio.com");
+CALL sp_insertar_correos(123456787, "correo2@dominio.com");
+
+/* Actulizar*/
+CALL sp_actualizar_correos(1, "correo@dominio.ed.cr");
+
+/* Eliminar*/
+CALL sp_eliminar_correos(1);
+
+
+/* Procedimientos almacenados para insertar, modificar y eliminar vehiculos */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_vehiculos
+(
+in	id_tipo_vehiculo int,
+in	vehiculo_num_interno int,
+in	vehiculo_num_placa varchar(50),
+in	vehiculo_marca varchar(50),
+in	vehiculo_modelo varchar(50),
+in	vehiculo_stock varchar(50),
+in	vehiculo_estado varchar(50),
+in	vehiculo_fecha_registro date
+)
+
+BEGIN
+insert into tab_inventario_vehiculos(id_tipo_vehiculo,vehiculo_num_interno, vehiculo_num_placa, vehiculo_marca, vehiculo_modelo, vehiculo_stock,
+vehiculo_estado, vehiculo_fecha_registro) 					
+			values(id_tipo_vehiculo, vehiculo_num_interno, vehiculo_num_placa, vehiculo_marca, vehiculo_modelo, vehiculo_stock,
+vehiculo_estado, vehiculo_fecha_registro);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_vehiculos
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_inventario_vehiculos WHERE id_inventario_vehiculo=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_vehiculos
+(
+in id int,
+in id_tipo_vehiculo int,
+in	vehiculo_num_interno int,
+in	vehiculo_num_placa varchar(50),
+in	vehiculo_marca varchar(50),
+in	vehiculo_modelo varchar(50),
+in	vehiculo_stock varchar(50),
+in	vehiculo_estado varchar(50),
+in	vehiculo_fecha_registro date
+)
+BEGIN
+UPDATE tab_inventario_vehiculos SET id_tipo_vehiculo=id_tipo_vehiculo, vehiculo_num_interno=vehiculo_num_interno,  vehiculo_num_placa=vehiculo_num_placa,
+vehiculo_marca=vehiculo_marca, vehiculo_modelo=vehiculo_modelo, vehiculo_modelo=vehiculo_modelo, vehiculo_stock=vehiculo_stock, vehiculo_estado=vehiculo_estado,
+vehiculo_fecha_registro=vehiculo_fecha_registro
+Where id_inventario_vehiculo=id;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_vehiculos(2, 12, "BBN-457", "Nissan", "2017", "Si", "Optimo", "2022-04-25");
+
+
+/* Actulizar*/
+CALL sp_actualizar_vehiculos(1, 1, 12, "BBN-457", "Modificado", "Modificado", "Modificado", "Modificado", "2022-04-25");
+
+/* Eliminar*/
+CALL sp_eliminar_vehiculos(1);
 
 
