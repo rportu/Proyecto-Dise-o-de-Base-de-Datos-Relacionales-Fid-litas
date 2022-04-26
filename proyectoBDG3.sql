@@ -776,4 +776,168 @@ CALL sp_actualizar_vehiculos(1, 1, 12, "BBN-457", "Modificado", "Modificado", "M
 /* Eliminar*/
 CALL sp_eliminar_vehiculos(1);
 
+/* Triggers o disparadores de Auditoria para Paquetería */
+CREATE TABLE IF NOT EXISTS log_tab_paqueteria(
+	id_paqueteria int,
+	id_cliente int(50),
+	id_oficina int,
+	id_empleado_proceso int,
+	id_tipo_envio_paqueteria int,
+	id_estado_paquete_paqueteria int,
+	paqueteria_usuario_registro varchar(50),
+	paqueteria_descripcion varchar(500),
+	paqueteria_fecha_registro date,
+	accion_realizada varchar(50),
+ 	usuario_modifico varchar (50),
+ 	fecha_modifico date
+);
 
+DELIMITER //
+
+CREATE TRIGGER trg_borrar_paqueteria BEFORE DELETE ON tab_paqueteria FOR EACH ROW
+	begin 
+		insert into log_tab_paqueteria (id_paqueteria, id_cliente, id_oficina, id_empleado_proceso, id_tipo_envio_paqueteria, 
+						id_estado_paquete_paqueteria, accion_realizada, paqueteria_usuario_registro, paqueteria_descripcion, 
+						paqueteria_fecha_registro, usuario_modifico, fecha_modifico)
+		values (old.id_paqueteria, old.id_cliente, old.id_oficina, old.id_empleado_proceso, old.id_tipo_envio_paqueteria,
+			old.id_estado_paquete_paqueteria, old.paqueteria_usuario_registro, old.paqueteria_descripcion, 
+			old.paqueteria_fecha_registro, 'Se actualizó el registro de paquetería', current_user(), now());
+	end //           
+
+DELIMITER //
+
+CREATE TRIGGER trg_actualizar_paqueteria AFTER UPDATE ON tab_paqueteria FOR EACH ROW 
+	begin
+		insert into log_tab_paqueteria (id_paqueteria, id_cliente, id_oficina, id_empleado_proceso, id_tipo_envio_paqueteria, 
+						id_estado_paquete_paqueteria, accion_realizada, paqueteria_usuario_registro, paqueteria_descripcion, 
+						paqueteria_fecha_registro, usuario_modifico, fecha_modifico)
+		values (new.id_paqueteria, new.id_cliente, new.id_oficina, new.id_empleado_proceso, new.id_tipo_envio_paqueteria,
+			new.id_estado_paquete_paqueteria, 'Se eliminó el registro de paquetería', new.paqueteria_usuario_registro, new.paqueteria_descripcion, 
+			new.paqueteria_fecha_registro, current_user(), now());
+  end //
+
+Delimiter ;
+
+/* Triggers o disparadores de Auditoria para Empleados */
+CREATE TABLE IF NOT EXISTS log_tab_empleados(
+	empleado_identificacion int(50),
+    id_empleado_puesto int,
+    id_empleado_oficina_asignada int,
+    id_empleado_direccion int,
+    empleado_estado varchar(50),
+    empleado_fecha_registro date,
+    empleado_nombre_usuario_registro varchar(50),
+    empleado_apellido_1 varchar(50),
+	empleado_apellido_2 varchar(50),
+    empleado_nombre varchar(50),
+    empleado_fecha_nac date,
+    accion_realizada varchar(50),
+    usuario_modifico varchar (50),
+ 	fecha_modifico date
+);
+
+DELIMITER //
+
+CREATE TRIGGER trg_actualizar_empleados AFTER UPDATE ON tab_empleados FOR EACH ROW
+	begin 
+		insert into log_tab_empleados (empleado_identificacion, id_empleado_puesto, id_empleado_oficina_asignada, id_empleado_direccion,
+						empleado_estado, empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, 
+						empleado_nombre, empleado_fecha_nac, accion_realizada, usuario_modifico, fecha_modifico)
+		values (new.empleado_identificacion, new.id_empleado_puesto, new.id_empleado_oficina_asignada, new.id_empleado_direccion,
+			new.empleado_estado, new.empleado_fecha_registro, new.empleado_nombre_usuario_registro, new.empleado_apellido_1, new.empleado_apellido_2, 
+			new.empleado_nombre, new.empleado_fecha_nac, 'Se actualizó un registro de empleado', current_user(), now());
+	end //
+
+DELIMITER //
+
+CREATE TRIGGER trg_borrar_empleados BEFORE DELETE ON tab_empleados FOR EACH ROW
+	begin 
+		insert into log_tab_empleados (empleado_identificacion, id_empleado_puesto, id_empleado_oficina_asignada, id_empleado_direccion,
+						empleado_estado, empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, 
+						empleado_nombre, empleado_fecha_nac, accion_realizada, usuario_modifico, fecha_modifico)
+		values (old.empleado_identificacion, old.id_empleado_puesto, old.id_empleado_oficina_asignada, old.id_empleado_direccion,
+						old.empleado_estado, old.empleado_fecha_registro, old.empleado_nombre_usuario_registro, old.empleado_apellido_1, old.empleado_apellido_2, 
+						old.empleado_nombre, old.empleado_fecha_nac, 'Se eliminó un registro de empleado', current_user(), now());
+	end //
+
+Delimiter ;
+
+/* Triggers o disparadores de Auditoria para Facturación */
+	CREATE TABLE IF NOT EXISTS log_tab_facturacion_paqueteria(
+	id_factura int ,
+	id_cliente_factura int,
+	factura_numero int,
+	factura_fecha datetime,
+	factura_costo_impuestos float,
+	factura_costo_flete float,
+	factura_costo_iva float,
+	factura_total_por_envio float,
+	factura_total_antes_iva float,
+	factura_total float,
+	factura_estado varchar(50),
+	factura_usuario_registro varchar(50),
+	accion_realizada varchar(50),
+  	usuario_modifico varchar (50),
+ 	fecha_modifico date
+);
+
+	DELIMITER //
+
+CREATE TRIGGER trg_actualizar_facturacion AFTER UPDATE ON tab_facturacion_paqueteria FOR EACH ROW
+	begin 
+		insert into log_tab_facturacion_paqueteria (id_factura, id_cliente_factura, factura_numero, factura_fecha, factura_costo_impuestos,
+								factura_costo_flete, factura_costo_iva, factura_total_por_envio, factura_total_antes_iva, factura_total, factura_estado,
+								factura_usuario_registro, accion_realizada, usuario_modifico, fecha_modifico)
+		values (new.id_factura, new.id_cliente_factura, new.factura_numero, new.factura_fecha, new.factura_costo_impuestos,
+						new.factura_costo_flete, new.factura_costo_iva, new.factura_total_por_envio, new.factura_total_antes_iva, new.factura_total, new.factura_estado,
+						new.factura_usuario_registro,'Se actualizó un registro de facturación', current_user(), now());
+	end //
+
+	DELIMITER //
+
+CREATE TRIGGER trg_borrar_facturacion BEFORE DELETE ON tab_facturacion_paqueteria FOR EACH ROW
+	begin 
+		insert into log_tab_facturacion_paqueteria (id_factura, id_cliente_factura, factura_numero, factura_fecha, factura_costo_impuestos,
+								factura_costo_flete, factura_costo_iva, factura_total_por_envio, factura_total_antes_iva, factura_total, factura_estado,
+								factura_usuario_registro, accion_realizada, usuario_modifico, fecha_modifico)
+		values (old.id_factura, old.id_cliente_factura, old.factura_numero, old.factura_fecha, old.factura_costo_impuestos,
+			old.factura_costo_flete, old.factura_costo_iva, old.factura_total_por_envio, old.factura_total_antes_iva, old.factura_total, old.factura_estado,
+			old.factura_usuario_registro,'Se eliminó un registro de facturación', current_user(), now());
+	end //
+
+	Delimiter ;
+
+/* Triggers o disparadores de Auditoria para Clientes */
+CREATE TABLE IF NOT EXISTS log_tab_clientes(
+	cliente_identificacion int(50),
+	id_tipo_cliente_paqueteria int,
+	cliente_apellido_1 varchar(50),
+	cliente_apellido_2 varchar(50),
+	cliente_nombre varchar(50),
+	accion_realizada varchar(50),
+  	usuario_modifico varchar (50),
+ 	fecha_modifico date
+);
+
+
+	DELIMITER //
+
+CREATE TRIGGER trg_actualizar_clientes AFTER UPDATE ON tab_clientes FOR EACH ROW
+	begin 
+		insert into log_tab_clientes (cliente_identificacion, id_tipo_cliente_paqueteria, cliente_apellido_1, cliente_apellido_2, cliente_nombre, 
+						accion_realizada, usuario_modifico, fecha_modifico)
+		values (new.cliente_identificacion, new.id_tipo_cliente_paqueteria, new.cliente_apellido_1, new.cliente_apellido_2, new.cliente_nombre, 
+			'Se actualizó un registro de clientes', current_user(), now());
+	end //
+
+	DELIMITER //
+
+CREATE TRIGGER trg_borrar_clientes BEFORE DELETE ON tab_clientes FOR EACH ROW
+	begin 
+		insert into log_tab_clientes (cliente_identificacion, id_tipo_cliente_paqueteria, cliente_apellido_1, cliente_apellido_2, cliente_nombre, 
+						accion_realizada, usuario_modifico, fecha_modifico)
+		values (old.cliente_identificacion, old.id_tipo_cliente_paqueteria, old.cliente_apellido_1, old.cliente_apellido_2, old.cliente_nombre, 
+			'Se eliminó un registro de clientes', current_user(), now());
+	end //
+		
+	Delimiter ;
