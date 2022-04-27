@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS tab_direcciones(
 	direccion_otras_senas varchar(500)
 );
 
-
 CREATE TABLE IF NOT EXISTS tab_empleados(
 	empleado_identificacion int(50) primary key not null,
     id_empleado_puesto int not null,
@@ -41,18 +40,39 @@ CREATE TABLE IF NOT EXISTS tab_empleados(
     foreign key(id_empleado_direccion) references tab_direcciones(id_direccion)
 );
 
+CREATE TABLE IF NOT EXISTS tab_tipo_cliente_paqueteria(
+	id_tipo_cliente_paqueteria int auto_increment primary key not null,
+	tipo_cliente_paqueteria varchar(50) not null
+);
+
+CREATE TABLE IF NOT EXISTS tab_clientes(
+	cliente_identificacion int(50) primary key not null,
+	id_tipo_cliente_paqueteria int not null,
+	id_cliente_direccion int not null,
+	cliente_apellido_1 varchar(50) not null,
+	cliente_apellido_2 varchar(50) not null,
+	cliente_nombre varchar(50) not null,
+    foreign key (id_tipo_cliente_paqueteria) references tab_tipo_cliente_paqueteria(id_tipo_cliente_paqueteria),
+    foreign key(id_cliente_direccion) references tab_direcciones(id_direccion)
+    
+);
+
 CREATE TABLE IF NOT EXISTS tab_correos(
 	id_correo int auto_increment primary key not null,
-	identificacion_usuario_correo int(50) not null,
+	identificacion_clientes_telefono int(50),
+    identificacion_empleados_telefono int(50),
 	correo varchar(50) not null,
-    foreign key (identificacion_usuario_correo) references tab_empleados(empleado_identificacion) ON DELETE CASCADE
+    foreign key (identificacion_empleados_telefono) references tab_empleados(empleado_identificacion) ON DELETE CASCADE,
+    foreign key (identificacion_clientes_telefono) references tab_clientes(cliente_identificacion) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tab_telefonos(
 	id_telefono int auto_increment primary key not null,
-	identificacion_usuario_telefono int(50) not null,
+	identificacion_clientes_telefono int(50),
+    identificacion_empleados_telefono int(50),
 	telefono int not null,
-    foreign key (identificacion_usuario_telefono) references tab_empleados(empleado_identificacion) ON DELETE CASCADE
+    foreign key (identificacion_empleados_telefono) references tab_empleados(empleado_identificacion) ON DELETE CASCADE,
+    foreign key (identificacion_clientes_telefono) references tab_clientes(cliente_identificacion) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tab_tipo_vehiculo(
@@ -78,8 +98,6 @@ CREATE TABLE IF NOT EXISTS tab_tipo_mantenimiento_vehiculo(
 	tipo_mantenimiento_vehiculo varchar(50) not null
     );
 
-
-
 CREATE TABLE IF NOT EXISTS tab_revision_vehiculos(
 	id_revision_vehiculo int auto_increment primary key not null,
 	id_inventario_vehiculo int not null,
@@ -90,19 +108,6 @@ CREATE TABLE IF NOT EXISTS tab_revision_vehiculos(
     foreign key(id_tipo_mantenimiento_vehiculo) references tab_tipo_mantenimiento_vehiculo(id_tipo_mantenimiento_vehiculo)
 );
 
-CREATE TABLE IF NOT EXISTS tab_tipo_cliente_paqueteria(
-	id_tipo_cliente_paqueteria int auto_increment primary key not null,
-	tipo_cliente_paqueteria varchar(50) not null
-);
-
-CREATE TABLE IF NOT EXISTS tab_clientes(
-	cliente_identificacion int(50) primary key not null,
-	id_tipo_cliente_paqueteria int not null,
-	cliente_apellido_1 varchar(50) not null,
-	cliente_apellido_2 varchar(50) not null,
-	cliente_nombre varchar(50) not null,
-    foreign key (id_tipo_cliente_paqueteria) references tab_tipo_cliente_paqueteria(id_tipo_cliente_paqueteria)
-);
 
 CREATE TABLE IF NOT EXISTS tab_tipo_envio_paqueteria(
 	id_tipo_envio_paqueteria int auto_increment primary key not null,
@@ -149,7 +154,6 @@ CREATE TABLE IF NOT EXISTS tab_paqueteria(
     foreign key (id_estado_paquete_paqueteria) references tab_estado_paquete_paqueteria(id_estado_paquete_paqueteria),
     foreign key (id_factura_paquete) references tab_facturacion_paqueteria(id_factura)
 );
-
 
 
 /* Procedimiento almacenado para insertar, eliminar y actulizar mantenimientos de vehiculo */
