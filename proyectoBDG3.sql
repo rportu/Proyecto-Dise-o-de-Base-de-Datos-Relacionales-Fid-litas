@@ -625,19 +625,92 @@ CALL sp_eliminar_empleados(987654321);
 
 
 
+/* Procedimientos almacenados para insertar, modificar y eliminar Clientes */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_clientes
+(
+	in identificacion int(50),
+	in id_tipo_paqueteria int(11), 
+	in id_direccion int(11), 
+	in apellido_1 varchar(50), 
+	in apellido_2 varchar(50), 
+	in nombre varchar(50)
+)
+
+BEGIN
+insert into tab_clientes(cliente_identificacion, id_tipo_cliente_paqueteria, id_cliente_direccion,cliente_apellido_1,cliente_apellido_2,cliente_nombre) 					
+			values(identificacion, id_tipo_paqueteria,id_direccion,apellido_1,apellido_2,nombre);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_clientes
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_clientes WHERE cliente_identificacion=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_clientes
+(
+	in identificacion int(50),
+	in id_tipo_paqueteria int(11), 
+	in id_direccion int(11), 
+	in apellido_1 varchar(50), 
+	in apellido_2 varchar(50), 
+	in nombre varchar(50)
+)
+BEGIN
+UPDATE tab_clientes SET id_tipo_cliente_paqueteria=id_tipo_paqueteria, id_cliente_direccion=id_direccion,
+cliente_apellido_1=apellido_1, cliente_apellido_2=apellido_2, cliente_nombre=nombre
+Where cliente_identificacion=identificacion;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_clientes(123412345,2,3,"Vargas","Mejia","Heiner");
+CALL sp_insertar_clientes(123412342,1,2,"Mata","Piña","Daniela");
+CALL sp_insertar_clientes(123412346,1,2,"Eliminar","Eliminar","Eliminar");
+
+/* Actulizar*/
+CALL sp_actualizar_clientes(123412342,2,2,"Mata","Piña","Daniela");
+
+/* Eliminar*/
+CALL sp_eliminar_clientes(123412346);
+
+
+
+
 /* Procedimientos almacenados para insertar, modificar y eliminar telefonos */
 DELIMITER $$
-CREATE PROCEDURE sp_insertar_telefonos
+CREATE PROCEDURE sp_insertar_telefonos_empleado
 (
-in	identificacion_usuario_telefono int,
+in	identificacion_empleados_telefono int,
 in	telefono int
 )
 
 BEGIN
-insert into tab_telefonos(identificacion_usuario_telefono, telefono) 					
-			values(identificacion_usuario_telefono, telefono);
+insert into tab_telefonos(identificacion_empleados_telefono, telefono) 					
+			values(identificacion_empleados_telefono, telefono);
 END$$
 Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_telefonos_cliente
+(
+in	identificacion_clientes_telefono int,
+in	telefono int
+)
+
+BEGIN
+insert into tab_telefonos(identificacion_clientes_telefono, telefono) 					
+			values(identificacion_clientes_telefono, telefono);
+END$$
+Delimiter ;
+
 
 DELIMITER $$
 CREATE PROCEDURE sp_eliminar_telefonos
@@ -656,13 +729,15 @@ in id int,
 in telefono int
 )
 BEGIN
-UPDATE tab_telefonos SET identificacion_usuario_telefono=identificacion_usuario_telefono, telefono=telefono Where id_telefono=id;
+UPDATE tab_telefonos SET telefono=telefono Where id_telefono=id;
 END$$
 Delimiter ;
 
 /* Insertar*/
-CALL sp_insertar_telefonos(123456787, 87654321);
-CALL sp_insertar_telefonos(123456787, 22304789);
+CALL sp_insertar_telefonos_empleado(123456787, 87654321);
+CALL sp_insertar_telefonos_empleado(123456787, 22304789);
+
+CALL sp_insertar_telefonos_cliente(123412342, 71718899);
 
 /* Actulizar*/
 CALL sp_actualizar_telefonos(1, 60329874);
@@ -671,17 +746,31 @@ CALL sp_actualizar_telefonos(1, 60329874);
 CALL sp_eliminar_telefonos(1);
 
 
+
 /* Procedimientos almacenados para insertar, modificar y eliminar correos */
 DELIMITER $$
-CREATE PROCEDURE sp_insertar_correos
+CREATE PROCEDURE sp_insertar_correos_empleado
 (
-in	identificacion_usuario_correo int,
+in	identificacion_empleados_telefono int,
 in	correo varchar(50)
 )
 
 BEGIN
-insert into tab_correos(identificacion_usuario_correo, correo) 					
-			values(identificacion_usuario_correo, correo);
+insert into tab_correos(identificacion_empleados_telefono, correo) 					
+			values(identificacion_empleados_telefono, correo);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_correos_cliente
+(
+in	identificacion_clientes_telefono int,
+in	correo varchar(50)
+)
+
+BEGIN
+insert into tab_correos(identificacion_clientes_telefono, correo) 					
+			values(identificacion_clientes_telefono, correo);
 END$$
 Delimiter ;
 
@@ -702,19 +791,23 @@ in id int,
 in correo varchar(50)
 )
 BEGIN
-UPDATE tab_correos SET identificacion_usuario_correo=identificacion_usuario_correo, correo=correo Where id_correo=id;
+UPDATE tab_correos SET correo=correo Where id_correo=id;
 END$$
 Delimiter ;
 
 /* Insertar*/
-CALL sp_insertar_correos(123456787, "correo@dominio.com");
-CALL sp_insertar_correos(123456787, "correo2@dominio.com");
+CALL sp_insertar_correos_empleado(123456787, "correo@dominio.com");
+CALL sp_insertar_correos_empleado(123456787, "correo2@dominio.com");
+
+Call sp_insertar_correos_cliente(123412345, "correo3@dominio.com");
+
 
 /* Actulizar*/
 CALL sp_actualizar_correos(1, "correo@dominio.ed.cr");
 
 /* Eliminar*/
 CALL sp_eliminar_correos(1);
+
 
 
 /* Procedimientos almacenados para insertar, modificar y eliminar vehiculos */
