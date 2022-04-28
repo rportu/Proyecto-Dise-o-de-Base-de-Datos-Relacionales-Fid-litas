@@ -873,6 +873,165 @@ CALL sp_actualizar_vehiculos(1, 1, 12, "BBN-457", "Modificado", "Modificado", "M
 /* Eliminar*/
 CALL sp_eliminar_vehiculos(1);
 
+/* Procedimientos almacenados para insertar, modificar y eliminar facturas de paqueteria */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_facturas_paqueteria
+(
+in	id_cliente_factura int,
+in	factura_numero int,
+in	factura_fecha datetime,
+in	factura_costo_impuestos float,
+in	factura_costo_flete float,
+in	factura_costo_iva float,
+in	factura_total_por_envio float,
+in	factura_total_antes_iva float,
+in	factura_total float,
+in	factura_estado varchar(50),
+in	factura_usuario_registro varchar(50)
+)
+
+BEGIN
+insert into tab_facturacion_paqueteria(id_cliente_factura, factura_numero, factura_fecha, factura_costo_impuestos, factura_costo_flete, factura_costo_iva, factura_total_por_envio,
+factura_total_antes_iva, factura_total, factura_estado, factura_usuario_registro) 					
+			values(id_cliente_factura, factura_numero, factura_fecha, factura_costo_impuestos, factura_costo_flete, factura_costo_iva, factura_total_por_envio,
+factura_total_antes_iva, factura_total, factura_estado, factura_usuario_registro);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_facturas_paqueteria
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_facturacion_paqueteria WHERE id_factura=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_facturas_paqueteria
+(
+in id int, 
+in	factura_numero int,
+in	factura_fecha datetime,
+in	factura_costo_impuestos float,
+in	factura_costo_flete float,
+in	factura_costo_iva float,
+in	factura_total_por_envio float,
+in	factura_total_antes_iva float,
+in	factura_total float,
+in	factura_estado varchar(50),
+in	factura_usuario_registro varchar(50)
+)
+BEGIN
+UPDATE tab_facturacion_paqueteria SET factura_numero=factura_numero, factura_fecha=factura_fecha, factura_costo_impuestos=factura_costo_impuestos, 
+factura_costo_flete=factura_costo_flete, factura_costo_iva=factura_costo_iva, factura_total_por_envio=factura_total_por_envio, factura_total_antes_iva=factura_total_antes_iva, 
+factura_total=factura_total, factura_estado=factura_estado, factura_usuario_registro =factura_usuario_registro
+Where id_factura=id;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_facturas_paqueteria(123412342, 1, "2022-04-26", 500, 2500, 800, 3800, 3300, 4000, "Pendiente", "Bob"); 
+CALL sp_insertar_facturas_paqueteria(123412342, 1, "2022-04-26", 500, 2500, 800, 3800, 3300, 4000, "Eliminar", "Bob"); 
+
+/* Actulizar*/
+CALL sp_actualizar_facturas_paqueteria(2, 1, "2022-04-26", 500, 2500, 800, 3800, 3300, 4000, "Cancelada", "Bob");
+
+/* Eliminar*/
+CALL sp_eliminar_facturas_paqueteria(3);
+
+/* Procedimientos almacenados para insertar, modificar y eliminar paquetes */
+DELIMITER $$
+CREATE PROCEDURE sp_insertar_paquetes
+(
+in	id_cliente int(50),
+in	id_oficina int,
+in	id_empleado_proceso int,
+in	id_tipo_envio_paqueteria int,
+in	id_estado_paquete_paqueteria int,
+in  id_factura_paquete int,
+in	paqueteria_numero int,
+in	paqueteria_usuario_registro varchar(50),
+in	paqueteria_descripcion varchar(500),
+in	paqueteria_fecha_registro date
+)
+
+BEGIN
+insert into tab_paqueteria(id_cliente, id_oficina, id_empleado_proceso, id_tipo_envio_paqueteria, id_estado_paquete_paqueteria, id_factura_paquete, paqueteria_numero,
+paqueteria_usuario_registro, paqueteria_descripcion, paqueteria_fecha_registro) 					
+			values(id_cliente, id_oficina, id_empleado_proceso, id_tipo_envio_paqueteria, id_estado_paquete_paqueteria, id_factura_paquete, paqueteria_numero,
+paqueteria_usuario_registro, paqueteria_descripcion, paqueteria_fecha_registro);
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_paquetes
+(
+in id int
+)
+BEGIN
+DELETE FROM tab_paqueteria WHERE id_paqueteria=id;
+END$$
+Delimiter ;
+
+DELIMITER $$
+CREATE PROCEDURE sp_actualizar_paquetes
+(
+in id int, 
+in	id_oficina int,
+in	id_empleado_proceso int,
+in	id_tipo_envio_paqueteria int,
+in	id_estado_paquete_paqueteria int,
+in  id_factura_paquete int,
+in	paqueteria_numero int,
+in	paqueteria_usuario_registro varchar(50),
+in	paqueteria_descripcion varchar(500),
+in	paqueteria_fecha_registro date
+)
+BEGIN
+UPDATE tab_paqueteria SET id_oficina=id_oficina, id_empleado_proceso=id_empleado_proceso, id_tipo_envio_paqueteria=id_tipo_envio_paqueteria, 
+id_estado_paquete_paqueteria=id_estado_paquete_paqueteria, id_factura_paquete=id_factura_paquete, paqueteria_numero=paqueteria_numero, paqueteria_usuario_registro=paqueteria_usuario_registro, 
+paqueteria_descripcion=paqueteria_descripcion, paqueteria_fecha_registro=paqueteria_fecha_registro
+Where id_paqueteria=id;
+END$$
+Delimiter ;
+
+/* Insertar*/
+CALL sp_insertar_paquetes(123412342, 1, 123456787, 1, 1, 2, 5, "Bob", "Enviar a Cartago", "2022-04-26"); 
+CALL sp_insertar_paquetes(123412342, 1, 123456787, 1, 1, 2, 5, "Bob", "editar y Eliminar", "2022-04-26"); 
+
+/* Actulizar*/
+CALL sp_actualizar_paquetes(123412342, 1, 123456787, 1, 1, 2, 5, "Bob", "editar y Eliminar", "2022-04-26");
+
+/* Eliminar*/
+CALL sp_eliminar_paquetes(4);
+
+CREATE TABLE IF NOT EXISTS tab_paqueteria(
+	id_paqueteria int auto_increment primary key not null,
+	id_cliente int(50) not null,
+	id_oficina int not null,
+	id_empleado_proceso int not null,
+	id_tipo_envio_paqueteria int not null,
+	id_estado_paquete_paqueteria int not null,
+    id_factura_paquete int not null,
+	paqueteria_numero int not null,
+	paqueteria_usuario_registro varchar(50) not null,
+	paqueteria_descripcion varchar(500) not null,
+	paqueteria_fecha_registro date not null,
+    foreign key (id_cliente) references tab_clientes(cliente_identificacion),
+    foreign key (id_oficina) references tab_oficinas(id_oficina),
+    foreign key (id_empleado_proceso) references tab_empleados(empleado_identificacion),
+    foreign key (id_tipo_envio_paqueteria) references tab_tipo_envio_paqueteria(id_tipo_envio_paqueteria),
+    foreign key (id_estado_paquete_paqueteria) references tab_estado_paquete_paqueteria(id_estado_paquete_paqueteria),
+    foreign key (id_factura_paquete) references tab_facturacion_paqueteria(id_factura)
+);
+
+
+
+
+
+
 /* Triggers o disparadores de Auditoria para Paquetería */
 CREATE TABLE IF NOT EXISTS log_tab_paqueteria(
 	id_paqueteria int,
@@ -932,6 +1091,9 @@ CREATE TABLE IF NOT EXISTS log_tab_empleados(
     usuario_modifico varchar (50),
  	fecha_modifico date
 );
+
+
+
 
 DELIMITER //
 
