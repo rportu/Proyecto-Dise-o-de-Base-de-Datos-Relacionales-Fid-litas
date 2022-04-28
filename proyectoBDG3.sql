@@ -560,22 +560,22 @@ CREATE PROCEDURE sp_insertar_empleados
 (
 in empleado_identificacion int(50),
 in id_empleado_puesto int,
-  in   id_empleado_oficina_asignada int ,
-   in  id_empleado_direccion int ,
-   in  empleado_estado varchar(50),
-   in  empleado_fecha_registro date ,
-   in  empleado_nombre_usuario_registro varchar(50),
-   in  empleado_apellido_1 varchar(50) ,
-	in empleado_apellido_2 varchar(50) ,
-  in   empleado_nombre varchar(50) ,
-   in  empleado_fecha_nac date
+in   id_empleado_oficina_asignada int ,
+in  id_empleado_direccion int ,
+in  empleado_estado varchar(50),
+in  empleado_fecha_registro date ,
+in  empleado_nombre_usuario_registro varchar(50),
+in  empleado_apellido_1 varchar(50) ,
+in empleado_apellido_2 varchar(50) ,
+in   empleado_nombre varchar(50) ,
+ in  empleado_fecha_nac date
 )
 BEGIN
 insert into tab_empleados(empleado_identificacion, id_empleado_puesto, id_empleado_oficina_asignada, id_empleado_direccion, empleado_estado,
-						  empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, empleado_nombre, empleado_fecha_nac) 
+			  empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, empleado_nombre, empleado_fecha_nac) 
                           
-			values(empleado_identificacion,id_empleado_puesto, id_empleado_oficina_asignada, id_empleado_direccion, empleado_estado,
-						  empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, empleado_nombre, empleado_fecha_nac);
+		values(empleado_identificacion,id_empleado_puesto, id_empleado_oficina_asignada, id_empleado_direccion, empleado_estado,
+			empleado_fecha_registro, empleado_nombre_usuario_registro, empleado_apellido_1, empleado_apellido_2, empleado_nombre, empleado_fecha_nac);
 END$$
 Delimiter ;
 
